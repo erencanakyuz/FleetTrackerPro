@@ -1,0 +1,809 @@
+{
+  "vehicles": [
+    {
+      "id": "v001",
+      "name": "Kamyon 001",
+      "type": "truck",
+      "status": "active",
+      "location": {
+        "lat": 41.0082,
+        "lng": 28.9784
+      },
+      "driver": {
+        "id": "d001",
+        "name": "Mehmet Yılmaz",
+        "phone": "532-123-4567"
+      },
+      "fuel_level": 85,
+      "current_speed": 35,
+      "image_url": "https://via.placeholder.com/60x60?text=K001"
+    },
+    {
+      "id": "v002",
+      "name": "Panelvan 102",
+      "type": "van",
+      "status": "active",
+      "location": {
+        "lat": 41.0254,
+        "lng": 28.9744
+      },
+      "driver": {
+        "id": "d002",
+        "name": "Ayşe Kaya",
+        "phone": "533-234-5678"
+      },
+      "fuel_level": 72,
+      "current_speed": 28,
+      "image_url": "https://via.placeholder.com/60x60?text=P102"
+    },
+    {
+      "id": "v003",
+      "name": "Kamyon 003",
+      "type": "truck",
+      "status": "active",
+      "location": {
+        "lat": 40.9934,
+        "lng": 29.0277
+      },
+      "driver": {
+        "id": "d003",
+        "name": "Ali Demir",
+        "phone": "535-345-6789"
+      },
+      "fuel_level": 65,
+      "current_speed": 0,
+      "image_url": "https://via.placeholder.com/60x60?text=K003"
+    },
+    {
+      "id": "v004",
+      "name": "Araba 204",
+      "type": "car",
+      "status": "idle",
+      "location": {
+        "lat": 41.0447,
+        "lng": 28.9253
+      },
+      "driver": {
+        "id": "d004",
+        "name": "Zeynep Şahin",
+        "phone": "536-456-7890"
+      },
+      "fuel_level": 92,
+      "current_speed": 0,
+      "image_url": "https://via.placeholder.com/60x60?text=A204"
+    },
+    {
+      "id": "v005",
+      "name": "Motosiklet 305",
+      "type": "motorcycle",
+      "status": "active",
+      "location": {
+        "lat": 41.0636,
+        "lng": 28.9714
+      },
+      "driver": {
+        "id": "d005",
+        "name": "Emre Yıldız",
+        "phone": "537-567-8901"
+      },
+      "fuel_level": 45,
+      "current_speed": 42,
+      "image_url": "https://via.placeholder.com/60x60?text=M305"
+    },
+    {
+      "id": "v006",
+      "name": "Panelvan 106",
+      "type": "van",
+      "status": "maintenance",
+      "location": {
+        "lat": 41.0291,
+        "lng": 29.0498
+      },
+      "driver": null,
+      "fuel_level": 30,
+      "current_speed": 0,
+      "image_url": "https://via.placeholder.com/60x60?text=P106"
+    },
+    {
+      "id": "v007",
+      "name": "Kamyon 007",
+      "type": "truck",
+      "status": "active",
+      "location": {
+        "lat": 40.9819,
+        "lng": 29.0636
+      },
+      "driver": {
+        "id": "d007",
+        "name": "Merve Çelik",
+        "phone": "538-678-9012"
+      },
+      "fuel_level": 88,
+      "current_speed": 32,
+      "image_url": "https://via.placeholder.com/60x60?text=K007"
+    },
+    {
+      "id": "v008",
+      "name": "Bisiklet 408",
+      "type": "bicycle",
+      "status": "active",
+      "location": {
+        "lat": 41.0167,
+        "lng": 28.9667
+      },
+      "driver": {
+        "id": "d008",
+        "name": "Burak Öztürk",
+        "phone": "539-789-0123"
+      },
+      "fuel_level": 100,
+      "current_speed": 15,
+      "image_url": "https://via.placeholder.com/60x60?text=B408"
+    }
+  ],
+  "routes": [
+    {
+      "id": "r001",
+      "vehicle_id": "v001",
+      "status": "active",
+      "start_time": "2025-03-03T08:00:00Z",
+      "estimated_end_time": "2025-03-03T17:00:00Z",
+      "total_distance": 45.8
+    },
+    {
+      "id": "r002",
+      "vehicle_id": "v002",
+      "status": "active",
+      "start_time": "2025-03-03T08:30:00Z",
+      "estimated_end_time": "2025-03-03T16:45:00Z",
+      "total_distance": 38.2
+    },
+    {
+      "id": "r003",
+      "vehicle_id": "v003",
+      "status": "active",
+      "start_time": "2025-03-03T09:00:00Z",
+      "estimated_end_time": "2025-03-03T18:15:00Z",
+      "total_distance": 52.3
+    },
+    {
+      "id": "r005",
+      "vehicle_id": "v005",
+      "status": "active",
+      "start_time": "2025-03-03T08:15:00Z",
+      "estimated_end_time": "2025-03-03T15:30:00Z",
+      "total_distance": 25.7
+    },
+    {
+      "id": "r007",
+      "vehicle_id": "v007",
+      "status": "active",
+      "start_time": "2025-03-03T08:45:00Z",
+      "estimated_end_time": "2025-03-03T16:30:00Z",
+      "total_distance": 41.2
+    },
+    {
+      "id": "r008",
+      "vehicle_id": "v008",
+      "status": "active",
+      "start_time": "2025-03-03T09:30:00Z",
+      "estimated_end_time": "2025-03-03T14:00:00Z",
+      "total_distance": 12.5
+    }
+  ],
+  "stops": [
+    {
+      "id": "s001-1",
+      "route_id": "r001",
+      "sequence": 1,
+      "type": "depot",
+      "location": {
+        "address": "Ana Depo, Sanayi Mahallesi, Atatürk Cad. No:123",
+        "lat": 41.0082,
+        "lng": 28.9784
+      },
+      "status": "completed",
+      "eta": "2025-03-03T08:00:00Z"
+    },
+    {
+      "id": "s001-2",
+      "route_id": "r001",
+      "sequence": 2,
+      "type": "delivery",
+      "location": {
+        "address": "Levent Ofis Kulesi, Büyükdere Cad. No:456",
+        "lat": 41.0826,
+        "lng": 29.0090
+      },
+      "status": "completed",
+      "eta": "2025-03-03T09:15:00Z"
+    },
+    {
+      "id": "s001-3",
+      "route_id": "r001",
+      "sequence": 3,
+      "type": "delivery",
+      "location": {
+        "address": "İstinye Park AVM, İstinye Mah. Sarıyer",
+        "lat": 41.1123,
+        "lng": 29.0343
+      },
+      "status": "in_progress",
+      "eta": "2025-03-03T11:00:00Z"
+    },
+    {
+      "id": "s001-4",
+      "route_id": "r001",
+      "sequence": 4,
+      "type": "pickup",
+      "location": {
+        "address": "Fabrika, Hadımköy Sanayi Bölgesi",
+        "lat": 41.1243,
+        "lng": 28.7791
+      },
+      "status": "pending",
+      "eta": "2025-03-03T14:30:00Z"
+    },
+    {
+      "id": "s001-5",
+      "route_id": "r001",
+      "sequence": 5,
+      "type": "delivery",
+      "location": {
+        "address": "Ataşehir Rezidans, Ataşehir Bulvarı No:55",
+        "lat": 40.9929,
+        "lng": 29.1276
+      },
+      "status": "pending",
+      "eta": "2025-03-03T16:00:00Z"
+    },
+    {
+      "id": "s001-6",
+      "route_id": "r001",
+      "sequence": 6,
+      "type": "depot",
+      "location": {
+        "address": "Ana Depo, Sanayi Mahallesi, Atatürk Cad. No:123",
+        "lat": 41.0082,
+        "lng": 28.9784
+      },
+      "status": "pending",
+      "eta": "2025-03-03T17:00:00Z"
+    },
+    {
+      "id": "s002-1",
+      "route_id": "r002",
+      "sequence": 1,
+      "type": "depot",
+      "location": {
+        "address": "Dağıtım Merkezi, İkitelli OSB",
+        "lat": 41.0254,
+        "lng": 28.9744
+      },
+      "status": "completed",
+      "eta": "2025-03-03T08:30:00Z"
+    },
+    {
+      "id": "s002-2",
+      "route_id": "r002",
+      "sequence": 2,
+      "type": "delivery",
+      "location": {
+        "address": "Teknoloji Parkı, Maslak",
+        "lat": 41.1129,
+        "lng": 29.0256
+      },
+      "status": "completed",
+      "eta": "2025-03-03T09:45:00Z"
+    },
+    {
+      "id": "s002-3",
+      "route_id": "r002",
+      "sequence": 3,
+      "type": "delivery",
+      "location": {
+        "address": "Hastane Kompleksi, Bağcılar",
+        "lat": 41.0376,
+        "lng": 28.8504
+      },
+      "status": "completed",
+      "eta": "2025-03-03T11:30:00Z"
+    },
+    {
+      "id": "s002-4",
+      "route_id": "r002",
+      "sequence": 4,
+      "type": "delivery",
+      "location": {
+        "address": "İstanbul Üniversitesi, Beyazıt",
+        "lat": 41.0125,
+        "lng": 28.9648
+      },
+      "status": "in_progress",
+      "eta": "2025-03-03T13:45:00Z"
+    },
+    {
+      "id": "s002-5",
+      "route_id": "r002",
+      "sequence": 5,
+      "type": "depot",
+      "location": {
+        "address": "Dağıtım Merkezi, İkitelli OSB",
+        "lat": 41.0254,
+        "lng": 28.9744
+      },
+      "status": "pending",
+      "eta": "2025-03-03T16:45:00Z"
+    },
+    {
+      "id": "s003-1",
+      "route_id": "r003",
+      "sequence": 1,
+      "type": "depot",
+      "location": {
+        "address": "Lojistik Merkez, Kartal",
+        "lat": 40.9934,
+        "lng": 29.0277
+      },
+      "status": "completed",
+      "eta": "2025-03-03T09:00:00Z"
+    },
+    {
+      "id": "s003-2",
+      "route_id": "r003",
+      "sequence": 2,
+      "type": "pickup",
+      "location": {
+        "address": "Toptancı Hali, Bayrampaşa",
+        "lat": 41.0389,
+        "lng": 28.9173
+      },
+      "status": "completed",
+      "eta": "2025-03-03T10:15:00Z"
+    },
+    {
+      "id": "s003-3",
+      "route_id": "r003",
+      "sequence": 3,
+      "type": "delivery",
+      "location": {
+        "address": "Marmara Forum AVM, Bakırköy",
+        "lat": 40.9917,
+        "lng": 28.8878
+      },
+      "status": "pending",
+      "eta": "2025-03-03T13:00:00Z"
+    },
+    {
+      "id": "s003-4",
+      "route_id": "r003",
+      "sequence": 4,
+      "type": "depot",
+      "location": {
+        "address": "Lojistik Merkez, Kartal",
+        "lat": 40.9934,
+        "lng": 29.0277
+      },
+      "status": "pending",
+      "eta": "2025-03-03T18:15:00Z"
+    },
+    {
+      "id": "s005-1",
+      "route_id": "r005",
+      "sequence": 1,
+      "type": "depot",
+      "location": {
+        "address": "Express Merkez, Şişli",
+        "lat": 41.0636,
+        "lng": 28.9714
+      },
+      "status": "completed",
+      "eta": "2025-03-03T08:15:00Z"
+    },
+    {
+      "id": "s005-2",
+      "route_id": "r005",
+      "sequence": 2,
+      "type": "delivery",
+      "location": {
+        "address": "Şehir Merkezi Ofisleri, Taksim",
+        "lat": 41.0370,
+        "lng": 28.9850
+      },
+      "status": "completed",
+      "eta": "2025-03-03T08:45:00Z"
+    },
+    {
+      "id": "s005-3",
+      "route_id": "r005",
+      "sequence": 3,
+      "type": "delivery",
+      "location": {
+        "address": "Restoran Sokağı, Beşiktaş",
+        "lat": 41.0436,
+        "lng": 29.0103
+      },
+      "status": "completed",
+      "eta": "2025-03-03T09:30:00Z"
+    },
+    {
+      "id": "s005-4",
+      "route_id": "r005",
+      "sequence": 4,
+      "type": "delivery",
+      "location": {
+        "address": "Moda Bölgesi, Kadıköy",
+        "lat": 40.9850,
+        "lng": 29.0430
+      },
+      "status": "in_progress",
+      "eta": "2025-03-03T10:15:00Z"
+    },
+    {
+      "id": "s005-5",
+      "route_id": "r005",
+      "sequence": 5,
+      "type": "delivery",
+      "location": {
+        "address": "Konut Kulesi, Ataköy",
+        "lat": 40.9782,
+        "lng": 28.8376
+      },
+      "status": "pending",
+      "eta": "2025-03-03T11:00:00Z"
+    },
+    {
+      "id": "s005-6",
+      "route_id": "r005",
+      "sequence": 6,
+      "type": "depot",
+      "location": {
+        "address": "Express Merkez, Şişli",
+        "lat": 41.0636,
+        "lng": 28.9714
+      },
+      "status": "pending",
+      "eta": "2025-03-03T15:30:00Z"
+    },
+    {
+      "id": "s007-1",
+      "route_id": "r007",
+      "sequence": 1,
+      "type": "depot",
+      "location": {
+        "address": "Merkez Depo, Ümraniye",
+        "lat": 40.9819,
+        "lng": 29.0636
+      },
+      "status": "completed",
+      "eta": "2025-03-03T08:45:00Z"
+    },
+    {
+      "id": "s007-2",
+      "route_id": "r007",
+      "sequence": 2,
+      "type": "delivery",
+      "location": {
+        "address": "Apartman Kompleksi, Maltepe",
+        "lat": 40.9532,
+        "lng": 29.1276
+      },
+      "status": "completed",
+      "eta": "2025-03-03T09:30:00Z"
+    },
+    {
+      "id": "s007-3",
+      "route_id": "r007",
+      "sequence": 3,
+      "type": "delivery",
+      "location": {
+        "address": "Ofis Parkı, Kozyatağı",
+        "lat": 40.9723,
+        "lng": 29.1063
+      },
+      "status": "in_progress",
+      "eta": "2025-03-03T11:15:00Z"
+    },
+    {
+      "id": "s007-4",
+      "route_id": "r007",
+      "sequence": 4,
+      "type": "pickup",
+      "location": {
+        "address": "Üretim Tesisi, Dudullu OSB",
+        "lat": 41.0018,
+        "lng": 29.1494
+      },
+      "status": "pending",
+      "eta": "2025-03-03T13:45:00Z"
+    },
+    {
+      "id": "s007-5",
+      "route_id": "r007",
+      "sequence": 5,
+      "type": "depot",
+      "location": {
+        "address": "Merkez Depo, Ümraniye",
+        "lat": 40.9819,
+        "lng": 29.0636
+      },
+      "status": "pending",
+      "eta": "2025-03-03T16:30:00Z"
+    },
+    {
+      "id": "s008-1",
+      "route_id": "r008",
+      "sequence": 1,
+      "type": "depot",
+      "location": {
+        "address": "Yerel Dağıtım, Beyoğlu",
+        "lat": 41.0167,
+        "lng": 28.9667
+      },
+      "status": "completed",
+      "eta": "2025-03-03T09:30:00Z"
+    },
+    {
+      "id": "s008-2",
+      "route_id": "r008",
+      "sequence": 2,
+      "type": "delivery",
+      "location": {
+        "address": "Kahve Dükkanı, İstiklal Caddesi",
+        "lat": 41.0345,
+        "lng": 28.9788
+      },
+      "status": "completed",
+      "eta": "2025-03-03T09:45:00Z"
+    },
+    {
+      "id": "s008-3",
+      "route_id": "r008",
+      "sequence": 3,
+      "type": "delivery",
+      "location": {
+        "address": "Kitapçı, Galatasaray",
+        "lat": 41.0293,
+        "lng": 28.9825
+      },
+      "status": "in_progress",
+      "eta": "2025-03-03T10:15:00Z"
+    },
+    {
+      "id": "s008-4",
+      "route_id": "r008",
+      "sequence": 4,
+      "type": "delivery",
+      "location": {
+        "address": "Sanat Galerisi, Cihangir",
+        "lat": 41.0318,
+        "lng": 28.9850
+      },
+      "status": "pending",
+      "eta": "2025-03-03T11:00:00Z"
+    },
+    {
+      "id": "s008-5",
+      "route_id": "r008",
+      "sequence": 5,
+      "type": "delivery",
+      "location": {
+        "address": "Yerel Restoran, Karaköy",
+        "lat": 41.0222,
+        "lng": 28.9747
+      },
+      "status": "pending",
+      "eta": "2025-03-03T11:45:00Z"
+    },
+    {
+      "id": "s008-6",
+      "route_id": "r008",
+      "sequence": 6,
+      "type": "delivery",
+      "location": {
+        "address": "Çiçekçi, Nişantaşı",
+        "lat": 41.0494,
+        "lng": 28.9912
+      },
+      "status": "pending",
+      "eta": "2025-03-03T12:30:00Z"
+    },
+    {
+      "id": "s008-7",
+      "route_id": "r008",
+      "sequence": 7,
+      "type": "depot",
+      "location": {
+        "address": "Yerel Dağıtım, Beyoğlu",
+        "lat": 41.0167,
+        "lng": 28.9667
+      },
+      "status": "pending",
+      "eta": "2025-03-03T14:00:00Z"
+    }
+  ],
+  "activities": [
+    {
+      "id": "a001-1",
+      "vehicle_id": "v001",
+      "type": "departure",
+      "description": "Ana Depo'dan hareket edildi",
+      "timestamp": "2025-03-03T08:05:23Z"
+    },
+    {
+      "id": "a001-2",
+      "vehicle_id": "v001",
+      "type": "delivery_completed",
+      "description": "Levent Ofis Kulesi teslimatı tamamlandı",
+      "timestamp": "2025-03-03T09:25:45Z"
+    },
+    {
+      "id": "a001-3",
+      "vehicle_id": "v001",
+      "type": "stop_arrival",
+      "description": "İstinye Park AVM'ye varıldı",
+      "timestamp": "2025-03-03T10:58:12Z"
+    },
+    {
+      "id": "a001-4",
+      "vehicle_id": "v001",
+      "type": "break",
+      "description": "Sürücü öğle molası veriyor",
+      "timestamp": "2025-03-03T12:15:00Z"
+    },
+    {
+      "id": "a002-1",
+      "vehicle_id": "v002",
+      "type": "departure",
+      "description": "Dağıtım Merkezi'nden hareket edildi",
+      "timestamp": "2025-03-03T08:33:45Z"
+    },
+    {
+      "id": "a002-2",
+      "vehicle_id": "v002",
+      "type": "delivery_completed",
+      "description": "Teknoloji Parkı teslimatı tamamlandı",
+      "timestamp": "2025-03-03T09:50:22Z"
+    },
+    {
+      "id": "a002-3",
+      "vehicle_id": "v002",
+      "type": "delivery_completed",
+      "description": "Hastane Kompleksi teslimatı tamamlandı",
+      "timestamp": "2025-03-03T11:45:10Z"
+    },
+    {
+      "id": "a002-4",
+      "vehicle_id": "v002",
+      "type": "stop_arrival",
+      "description": "İstanbul Üniversitesi'ne varıldı",
+      "timestamp": "2025-03-03T13:40:33Z"
+    },
+    {
+      "id": "a003-1",
+      "vehicle_id": "v003",
+      "type": "departure",
+      "description": "Lojistik Merkez'den hareket edildi",
+      "timestamp": "2025-03-03T09:05:12Z"
+    },
+    {
+      "id": "a003-2",
+      "vehicle_id": "v003",
+      "type": "pickup_completed",
+      "description": "Toptancı Hali'nden yük alındı",
+      "timestamp": "2025-03-03T10:22:38Z"
+    },
+    {
+      "id": "a003-3",
+      "vehicle_id": "v003",
+      "type": "break",
+      "description": "Araç yakıt dolumu için durdu",
+      "timestamp": "2025-03-03T11:45:00Z"
+    },
+    {
+      "id": "a005-1",
+      "vehicle_id": "v005",
+      "type": "departure",
+      "description": "Express Merkez'den hareket edildi",
+      "timestamp": "2025-03-03T08:17:22Z"
+    },
+    {
+      "id": "a005-2",
+      "vehicle_id": "v005",
+      "type": "delivery_completed",
+      "description": "Şehir Merkezi Ofisleri teslimatı tamamlandı",
+      "timestamp": "2025-03-03T08:50:15Z"
+    },
+    {
+      "id": "a005-3",
+      "vehicle_id": "v005",
+      "type": "delivery_completed",
+      "description": "Restoran Sokağı teslimatı tamamlandı",
+      "timestamp": "2025-03-03T09:38:42Z"
+    },
+    {
+      "id": "a005-4",
+      "vehicle_id": "v005",
+      "type": "stop_arrival",
+      "description": "Moda Bölgesi'ne varıldı",
+      "timestamp": "2025-03-03T10:12:55Z"
+    },
+    {
+      "id": "a007-1",
+      "vehicle_id": "v007",
+      "type": "departure",
+      "description": "Merkez Depo'dan hareket edildi",
+      "timestamp": "2025-03-03T08:48:33Z"
+    },
+    {
+      "id": "a007-2",
+      "vehicle_id": "v007",
+      "type": "delivery_completed",
+      "description": "Apartman Kompleksi teslimatı tamamlandı",
+      "timestamp": "2025-03-03T09:35:27Z"
+    },
+    {
+      "id": "a007-3",
+      "vehicle_id": "v007",
+      "type": "stop_arrival",
+      "description": "Ofis Parkı'na varıldı",
+      "timestamp": "2025-03-03T11:10:44Z"
+    },
+    {
+      "id": "a008-1",
+      "vehicle_id": "v008",
+      "type": "departure",
+      "description": "Yerel Dağıtım'dan hareket edildi",
+      "timestamp": "2025-03-03T09:32:18Z"
+    },
+    {
+      "id": "a008-2",
+      "vehicle_id": "v008",
+      "type": "delivery_completed",
+      "description": "Kahve Dükkanı teslimatı tamamlandı",
+      "timestamp": "2025-03-03T09:48:45Z"
+    },
+    {
+      "id": "a008-3",
+      "vehicle_id": "v008",
+      "type": "stop_arrival",
+      "description": "Kitapçı'ya varıldı",
+      "timestamp": "2025-03-03T10:12:30Z"
+    },
+    {
+      "id": "a008-4",
+      "vehicle_id": "v008",
+      "type": "notification",
+      "description": "Trafik sıkışıklığı nedeniyle gecikme yaşanıyor",
+      "timestamp": "2025-03-03T10:45:12Z"
+    },
+    {
+      "id": "a005-5",
+      "vehicle_id": "v005",
+      "type": "traffic",
+      "description": "Boğaz Köprüsü'nde yoğun trafik",
+      "timestamp": "2025-03-03T12:32:18Z"
+    },
+    {
+      "id": "a007-4",
+      "vehicle_id": "v007",
+      "type": "vehicle_issue",
+      "description": "Aracın lastik basıncı düşük, kontrol edilecek",
+      "timestamp": "2025-03-03T14:05:33Z"
+    },
+    {
+      "id": "a002-5",
+      "vehicle_id": "v002",
+      "type": "delivery_update",
+      "description": "Üniversite teslimatı devam ediyor",
+      "timestamp": "2025-03-03T14:22:10Z"
+    },
+    {
+      "id": "a001-5",
+      "vehicle_id": "v001",
+      "type": "delivery_completed",
+      "description": "İstinye Park AVM teslimatı tamamlandı",
+      "timestamp": "2025-03-03T15:40:22Z"
+    }
+  ]
+}
