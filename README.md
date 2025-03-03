@@ -1,5 +1,5 @@
 # FleetTracker Pro - Istanbul GPS Fleet Management System
-
+The information on the site is for demo purposes only and is intended to test the functionality of the system.
 ![FleetTracker Pro Logo](https://via.placeholder.com/800x150?text=FleetTracker+Pro+Istanbul)
 WEBSITE: https://erencanakyuz.github.io/FleetTrackerPro/
 
