@@ -1,7 +1,97 @@
-# FleetTracker Pro - Istanbul GPS Fleet Management System
-The information on the site is for demo purposes only and is intended to test the functionality of the system.
-![FleetTracker Pro Logo](https://via.placeholder.com/800x150?text=FleetTracker+Pro+Istanbul)
-WEBSITE: https://erencanakyuz.github.io/FleetTrackerPro/
+# FleetTracker Pro
+
+FleetTracker Pro is a GPS-based fleet management system for tracking and managing vehicles in Istanbul. The application provides real-time location tracking, route management, and vehicle status monitoring.
+
+## Features
+
+- 🚚 Real-time GPS tracking for your entire fleet
+- 🗺️ Interactive map with vehicle locations and routes
+- 📈 Dashboard with fleet statistics and key performance indicators
+- 🔋 Fuel monitoring system with low fuel alerts
+- 🌤️ Real-time weather information for Istanbul
+- 🌓 Dark mode support for low-light conditions
+- ⌨️ Keyboard shortcuts for faster navigation
+- ⚡ Speed boost feature for testing high-speed vehicles (up to 200 km/h)
+- 📱 Responsive design that works on desktop and mobile devices
+
+## How to Run
+
+There are several ways to run the application:
+
+### Option 1: Using the Node.js Server
+
+If you have Node.js installed:
+
+```bash
+# From the project root directory
+node run_server.js
+```
+
+Then open your browser and go to: http://localhost:8080
+
+### Option 2: Using Python's HTTP Server
+
+If you have Python installed:
+
+```bash
+# Python 3
+python -m http.server
+
+# Python 2
+python -m SimpleHTTPServer
+```
+
+Then open your browser and go to: http://localhost:8000
+
+### Option 3: Using an IDE's Live Server
+
+If you're using VS Code or Cursor:
+1. Install the "Live Server" extension
+2. Right-click on `index.html`
+3. Select "Open with Live Server"
+
+## Keyboard Shortcuts
+
+For faster navigation, you can use the following keyboard shortcuts:
+
+- **D**: Toggle Dark Mode
+- **V**: View All Vehicles
+- **R**: View Active Routes
+- **H**: View Heatmap
+- **O**: Optimize Routes
+- **L**: Toggle Live Tracking
+- **C**: Clear Map
+- **B**: Boost Selected Vehicle Speed
+- **T**: Track Selected Vehicle
+- **M**: Message Driver
+- **A**: Assign Task
+- **ESC**: Close Panels/Modals
+- **?**: Show Keyboard Shortcuts Help
+
+## Recent Improvements
+
+- ⚡ Increased speed range for vehicles up to 200 km/h
+- 🌓 Added enhanced dark mode toggle with smoother transitions
+- 💻 Added keyboard shortcuts for faster navigation
+- 📊 Improved activity tracking with better visual indicators
+- 📱 Enhanced mobile responsiveness
+- 🚨 Added advanced notification system for alerts
+- 🚀 Added speed boost feature with visual effects
+
+## Technologies Used
+
+- HTML5, CSS3, JavaScript
+- Leaflet.js for interactive maps
+- Leaflet Heat for heatmap visualization
+- Font Awesome for icons
+
+## Browser Support
+
+Compatible with all modern browsers:
+- Chrome/Edge (Chromium-based)
+- Firefox
+- Safari
+- Mobile browsers
 
 ## Overview
 

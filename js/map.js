@@ -80,14 +80,27 @@ class MapController {
         });
 
         // Add dark mode toggle button to map
-        const darkModeControl = L.control({ position: 'bottomright' });
+        const darkModeControl = L.control({ position: 'topright' });
         darkModeControl.onAdd = () => {
-            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-            div.innerHTML = `<a href="#" title="Toggle Dark Mode" style="display: flex; align-items: center; justify-content: center; font-size: 16px;"><i class="fas fa-moon"></i></a>`;
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control dark-mode-control');
+            div.innerHTML = `<a href="#" title="Toggle Dark Mode" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; font-size: 18px; background-color: white; border-radius: 4px;"><i class="fas fa-moon"></i></a>`;
 
             div.onclick = (e) => {
                 e.preventDefault();
                 this.toggleDarkMode();
+
+                // Update the icon based on the mode
+                const icon = div.querySelector('i');
+                if (this.isDarkMode) {
+                    icon.className = 'fas fa-sun';
+                    div.querySelector('a').style.backgroundColor = '#333';
+                    div.querySelector('a').style.color = '#fff';
+                } else {
+                    icon.className = 'fas fa-moon';
+                    div.querySelector('a').style.backgroundColor = 'white';
+                    div.querySelector('a').style.color = '#333';
+                }
+
                 return false;
             };
 

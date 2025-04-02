@@ -74,6 +74,9 @@ class FleetTrackerApp {
             // Initialize map
             this.mapController.initMap();
 
+            // Add dark mode toggle to header
+            this.addDarkModeToggle();
+
             // Load fleet data
             await this.fleetManager.initialize();
 
@@ -91,6 +94,9 @@ class FleetTrackerApp {
 
             // Set up event listeners
             this.setupEventListeners();
+
+            // Setup keyboard shortcuts
+            this.setupKeyboardShortcuts();
 
             // Set current date in history picker
             const today = new Date();
@@ -196,6 +202,19 @@ class FleetTrackerApp {
             this.closeDetailsPanel();
         });
 
+        // Add speed boost button to track button area
+        const trackVehicleBtn = document.getElementById('track-vehicle');
+        if (trackVehicleBtn) {
+            const boostBtn = document.createElement('button');
+            boostBtn.id = 'boost-speed';
+            boostBtn.className = 'btn primary';
+            boostBtn.innerHTML = '<i class="fas fa-bolt"></i> Boost Speed';
+            boostBtn.addEventListener('click', () => this.boostVehicleSpeed());
+
+            // Insert after track button
+            trackVehicleBtn.parentNode.insertBefore(boostBtn, trackVehicleBtn.nextSibling);
+        }
+
         // Vehicle details buttons
         document.getElementById('track-vehicle').addEventListener('click', () => {
             const vehicle = this.fleetManager.getSelectedVehicle();
@@ -280,6 +299,12 @@ class FleetTrackerApp {
                 }
             }
         });
+
+        // Add listener for the keyboard shortcuts link in footer
+        document.getElementById('show-shortcuts').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showKeyboardShortcuts();
+        });
     }
 
     /**
@@ -336,22 +361,73 @@ class FleetTrackerApp {
         this.noSelectionMessage.style.display = 'none';
         this.vehicleDetails.style.display = 'block';
 
-        // Update vehicle info
+        // Update vehicle image
+        const vehicleImage = document.getElementById('vehicle-image');
+        vehicleImage.src = vehicle.image_url || 'https://via.placeholder.com/60x60?text=Vehicle';
+
+        // Update basic info
         document.getElementById('vehicle-name').textContent = vehicle.name;
-        document.getElementById('vehicle-image').src = vehicle.image_url || 'https://via.placeholder.com/60x60?text=Vehicle';
 
         // Update status
-        const vehicleStatus = document.getElementById('vehicle-status');
-        vehicleStatus.textContent = this.capitalizeFirst(vehicle.status);
-        vehicleStatus.className = 'status ' + vehicle.status;
+        const statusEl = document.getElementById('vehicle-status');
+        statusEl.textContent = this.capitalizeFirst(vehicle.status);
+        statusEl.className = 'status ' + vehicle.status;
 
-        // Update driver and stats
-        document.getElementById('driver-name').textContent = vehicle.driver ? vehicle.driver.name : 'Unassigned';
-        document.getElementById('fuel-level').textContent = `${vehicle.fuel_level || 0}%`;
-        document.getElementById('current-speed').textContent = `${vehicle.current_speed || 0} km/h`;
+        // Update driver
+        const driverNameEl = document.getElementById('driver-name');
+        driverNameEl.textContent = vehicle.driver ? vehicle.driver.name : 'Unassigned';
+
+        // Update fuel with color coding
+        const fuelLevelEl = document.getElementById('fuel-level');
+        const fuelPercent = Math.round(vehicle.fuel_level || 0);
+        fuelLevelEl.textContent = `${fuelPercent}%`;
+
+        // Add color indicator for fuel level
+        if (fuelPercent <= 20) {
+            fuelLevelEl.style.color = '#F44336'; // Red for low fuel
+        } else if (fuelPercent <= 40) {
+            fuelLevelEl.style.color = '#FFC107'; // Yellow for medium-low
+        } else {
+            fuelLevelEl.style.color = ''; // Default color
+        }
+
+        // Update speed with enhanced display
+        const speedEl = document.getElementById('current-speed');
+        const speed = vehicle.current_speed || 0;
+
+        // Create or get speed indicator span
+        let speedIndicator = speedEl.querySelector('.speed-indicator');
+        if (!speedIndicator) {
+            speedIndicator = document.createElement('span');
+            speedIndicator.className = 'speed-indicator';
+            speedEl.innerHTML = '';
+            speedEl.appendChild(speedIndicator);
+        }
+
+        // Update speed text and class based on speed range
+        speedIndicator.textContent = `${speed} km/h`;
+        speedIndicator.classList.remove('high', 'very-high');
+
+        if (speed > 120) {
+            speedIndicator.classList.add('very-high');
+        } else if (speed > 80) {
+            speedIndicator.classList.add('high');
+        }
+
+        // Update distance
         document.getElementById('distance-traveled').textContent = `${Math.round(vehicle.distance_traveled || 0)} km`;
 
         // Update route information
+        this.updateRouteInfo(vehicle);
+
+        // Update activity list
+        this.updateActivityList(vehicle);
+    }
+
+    /**
+     * Update the route information in the details panel
+     */
+    updateRouteInfo(vehicle) {
         const route = this.fleetManager.getVehicleRoute(vehicle.id);
         const routeStops = document.getElementById('route-stops');
 
@@ -389,16 +465,64 @@ class FleetTrackerApp {
             document.getElementById('stops-count').textContent = '0';
             document.getElementById('eta').textContent = 'N/A';
         }
+    }
 
-        // Update activities
+    /**
+     * Update the activity list in the details panel
+     */
+    updateActivityList(vehicle) {
         const activityList = document.getElementById('activity-list');
         let activitiesHtml = '';
 
         if (vehicle.activities && vehicle.activities.length > 0) {
             vehicle.activities.forEach(activity => {
+                // Add icon based on activity type
+                let icon = 'fa-circle';
+                let iconColor = '';
+
+                switch (activity.type) {
+                    case 'departure':
+                        icon = 'fa-play-circle';
+                        iconColor = 'color: #4CAF50;'; // Green
+                        break;
+                    case 'delivery_completed':
+                    case 'pickup_completed':
+                    case 'stop_completed':
+                        icon = 'fa-check-circle';
+                        iconColor = 'color: #4CAF50;'; // Green
+                        break;
+                    case 'stop_arrival':
+                        icon = 'fa-map-marker-alt';
+                        iconColor = 'color: #2196F3;'; // Blue
+                        break;
+                    case 'break':
+                        icon = 'fa-coffee';
+                        iconColor = 'color: #9C27B0;'; // Purple
+                        break;
+                    case 'traffic':
+                        icon = 'fa-traffic-light';
+                        iconColor = 'color: #FF9800;'; // Orange
+                        break;
+                    case 'vehicle_issue':
+                        icon = 'fa-exclamation-triangle';
+                        iconColor = 'color: #F44336;'; // Red
+                        break;
+                    case 'fuel_alert':
+                        icon = 'fa-gas-pump';
+                        iconColor = 'color: #F44336;'; // Red
+                        break;
+                    case 'route_completed':
+                        icon = 'fa-flag-checkered';
+                        iconColor = 'color: #4CAF50;'; // Green
+                        break;
+                }
+
                 activitiesHtml += `
                     <li class="activity-item">
-                        <div>${activity.description}</div>
+                        <div>
+                            <i class="fas ${icon}" style="${iconColor} margin-right: 8px;"></i>
+                            ${activity.description}
+                        </div>
                         <div class="activity-time">${this.formatTime(activity.timestamp)}</div>
                     </li>
                 `;
@@ -847,5 +971,278 @@ class FleetTrackerApp {
     capitalizeFirst(string) {
         if (!string) return '';
         return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    /**
+     * Add dark mode toggle button to header
+     */
+    addDarkModeToggle() {
+        const userInfo = document.querySelector('.user-info');
+        if (!userInfo) return;
+
+        const darkModeBtn = document.createElement('button');
+        darkModeBtn.className = 'dark-mode-btn';
+        darkModeBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+        darkModeBtn.title = 'Toggle Dark Mode';
+
+        darkModeBtn.addEventListener('click', () => {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+
+            // Update button icon and text
+            if (isDarkMode) {
+                darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                // Also toggle map if map controller exists
+                if (this.mapController && typeof this.mapController.toggleDarkMode === 'function') {
+                    if (!this.mapController.isDarkMode) {
+                        this.mapController.toggleDarkMode();
+                    }
+                }
+            } else {
+                darkModeBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+                // Also toggle map if map controller exists
+                if (this.mapController && typeof this.mapController.toggleDarkMode === 'function') {
+                    if (this.mapController.isDarkMode) {
+                        this.mapController.toggleDarkMode();
+                    }
+                }
+            }
+        });
+
+        userInfo.appendChild(darkModeBtn);
+    }
+
+    /**
+     * Boost the speed of the selected vehicle to demonstrate high speed capability
+     */
+    boostVehicleSpeed() {
+        const vehicle = this.fleetManager.getSelectedVehicle();
+        if (!vehicle) {
+            this.showMessage('No vehicle selected to boost speed', 3000);
+            return;
+        }
+
+        // Check if vehicle is active
+        if (vehicle.status !== 'active') {
+            this.showMessage(`
+                <div class="alert-message">
+                    <i class="fas fa-exclamation-triangle" style="color: #FFC107;"></i>
+                    <strong>${vehicle.name}</strong> is not active. Cannot boost speed.
+                </div>
+            `, 3000);
+            return;
+        }
+
+        // Temporary speed boost
+        const originalSpeed = vehicle.current_speed;
+        vehicle.current_speed = Math.min(200, originalSpeed * 3); // Triple speed up to 200 km/h
+
+        // Update UI
+        this.updateVehicleDetails(vehicle);
+
+        // Show booster effect on marker
+        const marker = this.mapController.markers[vehicle.id];
+        if (marker) {
+            // Add boost animation class
+            marker._icon.classList.add('boosted');
+
+            // Create speed trail effect
+            const trailColor = '#0d6efd';
+            const trailLine = L.polyline([
+                [vehicle.location.lat, vehicle.location.lng],
+                [vehicle.location.lat, vehicle.location.lng]
+            ], {
+                color: trailColor,
+                weight: 3,
+                opacity: 0.8,
+                dashArray: '5, 10'
+            }).addTo(this.mapController.map);
+
+            // Show notification
+            this.showMessage(`
+                <div class="alert-message">
+                    <i class="fas fa-bolt" style="color: #0d6efd;"></i>
+                    <strong>${vehicle.name}</strong> speed boosted to <strong>${vehicle.current_speed} km/h</strong>!
+                </div>
+            `, 3000);
+
+            // Reset after 5 seconds
+            setTimeout(() => {
+                vehicle.current_speed = originalSpeed;
+                this.updateVehicleDetails(vehicle);
+                marker._icon.classList.remove('boosted');
+                this.mapController.map.removeLayer(trailLine);
+
+                this.showMessage(`
+                    <div class="alert-message">
+                        <i class="fas fa-tachometer-alt" style="color: #4CAF50;"></i>
+                        <strong>${vehicle.name}</strong> speed normalized to <strong>${vehicle.current_speed} km/h</strong>
+                    </div>
+                `, 3000);
+            }, 5000);
+        }
+    }
+
+    /**
+     * Setup keyboard shortcuts for quick navigation
+     */
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // Ignore shortcuts if user is typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                return;
+            }
+
+            // Get selected vehicle
+            const selectedVehicle = this.fleetManager.getSelectedVehicle();
+
+            switch (e.key) {
+                case 'd':
+                    // Toggle dark mode
+                    document.querySelector('.dark-mode-btn')?.click();
+                    break;
+                case 'v':
+                    // View all vehicles
+                    this.viewAllBtn.click();
+                    break;
+                case 'r':
+                    // View active routes
+                    this.viewRoutesBtn.click();
+                    break;
+                case 'h':
+                    // View heatmap
+                    this.viewHeatmapBtn.click();
+                    break;
+                case 'o':
+                    // Optimize routes
+                    this.optimizeRoutesBtn.click();
+                    break;
+                case 'l':
+                    // Toggle live tracking
+                    this.liveTrackingBtn.click();
+                    break;
+                case 'c':
+                    // Clear map
+                    this.clearMapBtn.click();
+                    break;
+                case 'b':
+                    // Boost speed (if vehicle selected)
+                    if (selectedVehicle) {
+                        document.getElementById('boost-speed')?.click();
+                    }
+                    break;
+                case 't':
+                    // Track vehicle (if vehicle selected)
+                    if (selectedVehicle) {
+                        document.getElementById('track-vehicle')?.click();
+                    }
+                    break;
+                case 'm':
+                    // Message driver (if vehicle selected)
+                    if (selectedVehicle) {
+                        document.getElementById('message-driver')?.click();
+                    }
+                    break;
+                case 'a':
+                    // Assign task (if vehicle selected)
+                    if (selectedVehicle) {
+                        document.getElementById('assign-task')?.click();
+                    }
+                    break;
+                case 'Escape':
+                    // Close any open panel or modal
+                    this.closeDetailsPanel();
+                    this.closeTaskModal();
+                    break;
+                case '?':
+                    // Show keyboard shortcuts help
+                    this.showKeyboardShortcuts();
+                    break;
+            }
+        });
+    }
+
+    /**
+     * Show keyboard shortcuts help
+     */
+    showKeyboardShortcuts() {
+        const shortcutsHtml = `
+            <div class="shortcuts-container">
+                <h3><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h3>
+                <div class="shortcuts-grid">
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">D</span>
+                        <span class="shortcut-desc">Toggle Dark Mode</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">V</span>
+                        <span class="shortcut-desc">View All Vehicles</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">R</span>
+                        <span class="shortcut-desc">View Active Routes</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">H</span>
+                        <span class="shortcut-desc">View Heatmap</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">O</span>
+                        <span class="shortcut-desc">Optimize Routes</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">L</span>
+                        <span class="shortcut-desc">Toggle Live Tracking</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">C</span>
+                        <span class="shortcut-desc">Clear Map</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">B</span>
+                        <span class="shortcut-desc">Boost Vehicle Speed</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">T</span>
+                        <span class="shortcut-desc">Track Selected Vehicle</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">M</span>
+                        <span class="shortcut-desc">Message Driver</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">A</span>
+                        <span class="shortcut-desc">Assign Task</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">ESC</span>
+                        <span class="shortcut-desc">Close Panels/Modals</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">?</span>
+                        <span class="shortcut-desc">Show This Help</span>
+                    </div>
+                </div>
+                <div class="shortcuts-footer">
+                    Press any key to close
+                </div>
+            </div>
+        `;
+
+        // Create modal overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'shortcuts-overlay';
+        overlay.innerHTML = shortcutsHtml;
+        document.body.appendChild(overlay);
+
+        // Close on click or keypress
+        const closeShortcuts = () => {
+            overlay.classList.add('fade-out');
+            setTimeout(() => {
+                document.body.removeChild(overlay);
+            }, 300);
+        };
+
+        overlay.addEventListener('click', closeShortcuts);
+        window.addEventListener('keydown', closeShortcuts, { once: true });
     }
 }

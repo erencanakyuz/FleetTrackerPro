@@ -174,7 +174,9 @@ class FleetManager {
 
                 // Simulate speed (faster when far from stop, slower when close)
                 // Adjust for Istanbul traffic patterns
-                vehicle.current_speed = Math.round(Math.min(60, Math.max(5, distance * 20))) * speedMultiplier;
+                const maxSpeed = 200;
+                const minSpeed = 5;
+                vehicle.current_speed = Math.round(Math.min(maxSpeed, Math.max(minSpeed, distance * 30))) * speedMultiplier;
 
                 // Update fuel level - cars use more fuel in congestion
                 const fuelConsumption = nearestCongestion ? 0.15 : 0.1;
