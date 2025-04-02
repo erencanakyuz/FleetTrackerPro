@@ -178,7 +178,28 @@ class FleetManager {
 
                 // Update fuel level - cars use more fuel in congestion
                 const fuelConsumption = nearestCongestion ? 0.15 : 0.1;
+                const previousFuelLevel = vehicle.fuel_level;
                 vehicle.fuel_level = Math.max(0, (vehicle.fuel_level || 100) - fuelConsumption);
+
+                // Check for low fuel and add an alert if needed
+                if (vehicle.fuel_level <= 20 && previousFuelLevel > 20) {
+                    // Create a fuel alert activity
+                    vehicle.activities.unshift({
+                        id: 'activity_' + Date.now(),
+                        vehicle_id: vehicle.id,
+                        type: 'fuel_alert',
+                        description: `Düşük yakıt seviyesi uyarısı! Yakıt seviyesi %${Math.round(vehicle.fuel_level)}`,
+                        timestamp: new Date().toISOString()
+                    });
+
+                    // Trigger an event to notify about low fuel
+                    document.dispatchEvent(new CustomEvent('vehicle-fuel-alert', {
+                        detail: {
+                            vehicleId: vehicle.id,
+                            fuelLevel: vehicle.fuel_level
+                        }
+                    }));
+                }
 
                 // If very close to the stop, mark it as completed
                 if (distance < 0.001) {

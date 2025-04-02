@@ -40,16 +40,26 @@ class FleetTrackerApp {
         this.taskModal = document.getElementById('task-modal');
         this.taskForm = document.getElementById('task-form');
 
-        // Set current date and username in header - FIX: add null checks
+        // Set current date and username in header
         const datetimeEl = document.querySelector('.datetime');
         const usernameEl = document.querySelector('.username');
 
-        if (datetimeEl) {
-            datetimeEl.textContent = '2025-03-03 20:11:03 UTC'; // Using the provided current time
-        }
-
         if (usernameEl) {
             usernameEl.textContent = 'erencanakyuz'; // Using the provided username
+        }
+
+        // Update the datetime every second
+        if (datetimeEl) {
+            const updateDateTime = () => {
+                const now = new Date();
+                datetimeEl.innerHTML = `<i class="far fa-clock"></i> ${now.toISOString().replace('T', ' ').substr(0, 19)} UTC`;
+            };
+
+            // Initial update
+            updateDateTime();
+
+            // Set interval to update every second
+            setInterval(updateDateTime, 1000);
         }
 
         // Initialize components
@@ -76,6 +86,9 @@ class FleetTrackerApp {
             // Update dashboard stats
             this.updateFleetStats();
 
+            // Load weather data
+            this.loadWeatherData();
+
             // Set up event listeners
             this.setupEventListeners();
 
@@ -89,6 +102,52 @@ class FleetTrackerApp {
         } catch (error) {
             console.error('Failed to initialize application:', error);
             this.showError('Failed to load fleet data. Please try again later.');
+        }
+    }
+
+    /**
+     * Load real-time weather data for Istanbul
+     */
+    async loadWeatherData() {
+        try {
+            // Create weather element if it doesn't exist
+            let weatherEl = document.querySelector('.weather-info');
+            if (!weatherEl) {
+                weatherEl = document.createElement('span');
+                weatherEl.classList.add('weather-info');
+                weatherEl.innerHTML = '<i class="fas fa-cloud"></i> Yükleniyor...';
+
+                // Insert after username
+                const userInfoEl = document.querySelector('.user-info');
+                if (userInfoEl) {
+                    userInfoEl.appendChild(weatherEl);
+                }
+            }
+
+            // For demo purposes, we'll use mocked weather data
+            // In a real app, you would fetch this from a weather API
+            const weatherData = {
+                temp: 18 + Math.floor(Math.random() * 10) - 5, // 13-23°C
+                condition: ['güneşli', 'parçalı bulutlu', 'yağmurlu', 'sisli'][Math.floor(Math.random() * 4)],
+                humidity: 60 + Math.floor(Math.random() * 20) // 60-80%
+            };
+
+            // Set weather icons based on condition
+            let weatherIcon = 'sun';
+            if (weatherData.condition === 'parçalı bulutlu') weatherIcon = 'cloud-sun';
+            if (weatherData.condition === 'yağmurlu') weatherIcon = 'cloud-rain';
+            if (weatherData.condition === 'sisli') weatherIcon = 'smog';
+
+            // Update weather element
+            weatherEl.innerHTML = `
+                <i class="fas fa-${weatherIcon}"></i> 
+                İstanbul: ${weatherData.temp}°C, ${weatherData.condition}, %${weatherData.humidity} nem
+            `;
+
+            // Update every 30 minutes
+            setTimeout(() => this.loadWeatherData(), 30 * 60 * 1000);
+        } catch (error) {
+            console.log('Weather data could not be loaded:', error);
         }
     }
 
@@ -190,6 +249,32 @@ class FleetTrackerApp {
                 ]);
 
                 // Update vehicle details if this is the selected vehicle
+                if (vehicleId === this.fleetManager.selectedVehicleId) {
+                    this.updateVehicleDetails(vehicle);
+                }
+            }
+        });
+
+        // Listen for fuel alerts
+        document.addEventListener('vehicle-fuel-alert', (e) => {
+            const vehicleId = e.detail.vehicleId;
+            const fuelLevel = e.detail.fuelLevel;
+            const vehicle = this.fleetManager.getVehicle(vehicleId);
+
+            if (vehicle) {
+                // Show a notification about low fuel
+                this.showMessage(`
+                    <div class="alert-message">
+                        <i class="fas fa-gas-pump" style="color: #F44336;"></i>
+                        <strong>${vehicle.name}</strong> yakıt seviyesi düşük! 
+                        Mevcut seviye: <strong>%${Math.round(fuelLevel)}</strong>
+                    </div>
+                `, 5000); // Show for 5 seconds
+
+                // Also update the vehicle in the list to show the fuel status
+                this.updateVehicleList();
+
+                // If this is the currently selected vehicle, update details
                 if (vehicleId === this.fleetManager.selectedVehicleId) {
                     this.updateVehicleDetails(vehicle);
                 }
@@ -609,38 +694,58 @@ class FleetTrackerApp {
     }
 
     /**
-     * Show a temporary message
+     * Show a temporary message to the user
      */
     showMessage(message, duration = 3000) {
-        // Create message element if it doesn't exist
-        let messageEl = document.getElementById('app-message');
-        if (!messageEl) {
-            messageEl = document.createElement('div');
-            messageEl.id = 'app-message';
-            messageEl.style.cssText = `
+        // Check if the message container already exists
+        let messageContainer = document.getElementById('message-container');
+
+        // Create the message container if it doesn't exist
+        if (!messageContainer) {
+            messageContainer = document.createElement('div');
+            messageContainer.id = 'message-container';
+            messageContainer.style.cssText = `
                 position: fixed;
                 top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 4px;
-                z-index: 2000;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                right: 20px;
+                z-index: 9999;
+                max-width: 300px;
+                transition: opacity 0.3s ease;
                 opacity: 0;
-                transition: opacity 0.3s;
             `;
-            document.body.appendChild(messageEl);
+            document.body.appendChild(messageContainer);
         }
 
-        // Set message text and show
-        messageEl.textContent = message;
-        messageEl.style.opacity = '1';
+        // Create the message element
+        const messageEl = document.createElement('div');
+        messageEl.style.cssText = `
+            background-color: #fff;
+            color: #333;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #0d6efd;
+            font-size: 14px;
+            font-weight: 500;
+        `;
 
-        // Hide after duration
+        // Set message content
+        messageEl.innerHTML = message;
+
+        // Add to container
+        messageContainer.appendChild(messageEl);
+        messageContainer.style.opacity = '1';
+
+        // Remove after duration
         setTimeout(() => {
             messageEl.style.opacity = '0';
+            setTimeout(() => {
+                messageContainer.removeChild(messageEl);
+                if (messageContainer.children.length === 0) {
+                    messageContainer.style.opacity = '0';
+                }
+            }, 300);
         }, duration);
     }
 

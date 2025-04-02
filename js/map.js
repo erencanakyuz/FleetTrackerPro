@@ -10,6 +10,11 @@ class MapController {
         this.heatmapLayer = null;
         this.currentView = 'all';
         this.selectedVehicle = null;
+        this.isDarkMode = false;
+        this.tileLayers = {
+            light: null,
+            dark: null
+        };
 
         // Icon definitions
         this.icons = {
@@ -60,16 +65,54 @@ class MapController {
      * Initialize the map
      */
     initMap() {
-        // Create the map centered on a default location (New York City)
-        this.map = L.map(this.mapElement).setView([40.7128, -74.0060], 12);
+        // Create the map centered on Istanbul instead of New York City
+        this.map = L.map(this.mapElement).setView([41.0082, 28.9784], 12);
 
-        // Add the tile layer (OpenStreetMap)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Add tile layers (light and dark mode)
+        this.tileLayers.light = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 19
         }).addTo(this.map);
 
+        this.tileLayers.dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+            maxZoom: 19
+        });
+
+        // Add dark mode toggle button to map
+        const darkModeControl = L.control({ position: 'bottomright' });
+        darkModeControl.onAdd = () => {
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+            div.innerHTML = `<a href="#" title="Toggle Dark Mode" style="display: flex; align-items: center; justify-content: center; font-size: 16px;"><i class="fas fa-moon"></i></a>`;
+
+            div.onclick = (e) => {
+                e.preventDefault();
+                this.toggleDarkMode();
+                return false;
+            };
+
+            return div;
+        };
+        darkModeControl.addTo(this.map);
+
         return this.map;
+    }
+
+    /**
+     * Toggle between light and dark mode
+     */
+    toggleDarkMode() {
+        this.isDarkMode = !this.isDarkMode;
+
+        if (this.isDarkMode) {
+            this.map.removeLayer(this.tileLayers.light);
+            this.tileLayers.dark.addTo(this.map);
+            document.querySelector('body').classList.add('dark-mode');
+        } else {
+            this.map.removeLayer(this.tileLayers.dark);
+            this.tileLayers.light.addTo(this.map);
+            document.querySelector('body').classList.remove('dark-mode');
+        }
     }
 
     /**
