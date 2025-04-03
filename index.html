@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0d6efd">
-    <meta name="description" content="FleetTracker Pro - GPS Fleet Management System for Istanbul">
+    <meta name="theme-color" content="#3a86ff">
+    <meta name="description" content="FleetTracker Pro - Modern GPS Fleet Management System for Istanbul">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>FleetTracker Pro - GPS Fleet Management System</title>
@@ -13,6 +13,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://img.icons8.com/color/32/000000/truck--v1.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://img.icons8.com/color/16/000000/truck--v1.png">
     <link rel="apple-touch-icon" sizes="180x180" href="https://img.icons8.com/color/180/000000/truck--v1.png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/styles.css">
     <!-- Leaflet CSS -->
@@ -24,42 +29,45 @@
 <body>
     <header>
         <div class="logo">
-            <i class="fas fa-truck-moving"></i>
+            <i class="fas fa-truck-fast"></i>
             <h1>FleetTracker<span>Pro</span> İstanbul</h1>
         </div>
         <div class="user-info">
-            <span class="username"><i class="fas fa-user"></i> erencanakyuz</span>
-            <span class="datetime"><i class="far fa-clock"></i> 2025-00-00 20:11:03 UTC</span>
+            <span class="username"><i class="fas fa-user-shield"></i> erencanakyuz</span>
+            <span class="datetime"><i class="fas fa-clock"></i> 2025-00-00 20:11:03 UTC</span>
+            <div class="dark-mode-control">
+                <a href="#" id="dark-mode-toggle"><i class="fas fa-moon"></i></a>
+            </div>
         </div>
     </header>
 
     <div class="container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h3>Fleet Dashboard</h3>
+                <h3><i class="fas fa-gauge-high"></i> Fleet Dashboard</h3>
             </div>
 
             <div class="fleet-stats">
                 <div class="stat-box">
                     <h4>Active Vehicles</h4>
-                    <div class="stat-value" id="active-vehicles">0</div>
+                    <div class="stat-value" id="active-vehicles"><i class="fas fa-truck-moving"></i> 0</div>
                 </div>
                 <div class="stat-box">
                     <h4>Total Distance</h4>
-                    <div class="stat-value" id="total-distance">0 km</div>
+                    <div class="stat-value" id="total-distance"><i class="fas fa-route"></i> 0 km</div>
                 </div>
                 <div class="stat-box">
                     <h4>Deliveries</h4>
-                    <div class="stat-value" id="total-deliveries">0</div>
+                    <div class="stat-value" id="total-deliveries"><i class="fas fa-box"></i> 0</div>
                 </div>
                 <div class="stat-box">
                     <h4>Efficiency</h4>
-                    <div class="stat-value" id="efficiency-rating">0%</div>
+                    <div class="stat-value" id="efficiency-rating"><i class="fas fa-gauge-simple-high"></i> 0%</div>
                 </div>
             </div>
 
             <div class="sidebar-section">
-                <h3>Vehicle List</h3>
+                <h3><i class="fas fa-list-check"></i> Vehicle List</h3>
                 <div class="search-box">
                     <input type="text" id="vehicle-search" placeholder="Search vehicles...">
                     <i class="fas fa-search"></i>
@@ -89,18 +97,19 @@
         <main>
             <div class="top-controls">
                 <div class="view-controls">
-                    <button id="view-all-vehicles" class="btn small active"><i class="fas fa-th"></i> All
+                    <button id="view-all-vehicles" class="btn small active"><i class="fas fa-table-cells-large"></i> All
                         Vehicles</button>
                     <button id="view-active-routes" class="btn small"><i class="fas fa-route"></i> Active
                         Routes</button>
-                    <button id="view-delivery-heatmap" class="btn small"><i class="fas fa-fire"></i> Delivery
+                    <button id="view-delivery-heatmap" class="btn small"><i class="fas fa-fire-flame-curved"></i>
+                        Delivery
                         Heatmap</button>
                 </div>
                 <div class="time-controls">
-                    <button id="live-tracking" class="btn primary active"><i class="fas fa-broadcast-tower"></i> Live
+                    <button id="live-tracking" class="btn primary active"><i class="fas fa-tower-broadcast"></i> Live
                         Tracking</button>
                     <div class="date-selector">
-                        <label for="history-date">History:</label>
+                        <label for="history-date"><i class="fas fa-history"></i> History:</label>
                         <input type="date" id="history-date">
                     </div>
                 </div>
@@ -109,7 +118,7 @@
             <div id="map-container">
                 <div id="map"></div>
 
-                <div class="map-legend">
+                <div class="map-legend" id="map-legend">
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #4CAF50;"></div>
                         <span>Active</span>

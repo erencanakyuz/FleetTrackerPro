@@ -52,7 +52,7 @@ class FleetTrackerApp {
         if (datetimeEl) {
             const updateDateTime = () => {
                 const now = new Date();
-                datetimeEl.innerHTML = `<i class="far fa-clock"></i> ${now.toISOString().replace('T', ' ').substr(0, 19)} UTC`;
+                datetimeEl.innerHTML = `<i class="fas fa-clock"></i> ${now.toISOString().replace('T', ' ').substring(0, 19)} UTC`;
             };
 
             // Initial update
@@ -86,7 +86,7 @@ class FleetTrackerApp {
             // Populate vehicle list
             this.updateVehicleList();
 
-            // Update dashboard stats
+            // Update dashboard stats with animation
             this.updateFleetStats();
 
             // Load weather data
@@ -146,7 +146,7 @@ class FleetTrackerApp {
 
             // Update weather element
             weatherEl.innerHTML = `
-                <i class="fas fa-${weatherIcon}"></i> 
+                <i class="fas fa-${weatherIcon}"></i>
                 İstanbul: ${weatherData.temp}°C, ${weatherData.condition}, %${weatherData.humidity} nem
             `;
 
@@ -285,7 +285,7 @@ class FleetTrackerApp {
                 this.showMessage(`
                     <div class="alert-message">
                         <i class="fas fa-gas-pump" style="color: #F44336;"></i>
-                        <strong>${vehicle.name}</strong> yakıt seviyesi düşük! 
+                        <strong>${vehicle.name}</strong> yakıt seviyesi düşük!
                         Mevcut seviye: <strong>%${Math.round(fuelLevel)}</strong>
                     </div>
                 `, 5000); // Show for 5 seconds
@@ -434,7 +434,7 @@ class FleetTrackerApp {
         if (route && route.stops && route.stops.length > 0) {
             let stopsHtml = '';
 
-            route.stops.forEach((stop, index) => {
+            route.stops.forEach(stop => {
                 const icon = this.getStopIcon(stop.type);
                 const statusClass = stop.status === 'completed' ? 'completed' :
                     (stop.status === 'in_progress' ? 'in-progress' : 'pending');
@@ -569,7 +569,7 @@ class FleetTrackerApp {
                 <div class="vehicle-status">
                     <div class="vehicle-name">${vehicle.name}</div>
                     <div class="vehicle-info">
-                        ${vehicle.driver ? vehicle.driver.name : 'No Driver'} | 
+                        ${vehicle.driver ? vehicle.driver.name : 'No Driver'} |
                         ${Math.round(vehicle.distance_traveled || 0)} km
                     </div>
                 </div>
@@ -586,15 +586,56 @@ class FleetTrackerApp {
     }
 
     /**
-     * Update fleet statistics
+     * Update fleet statistics with animation
      */
     updateFleetStats() {
         const stats = this.fleetManager.getFleetStats();
 
-        this.activeVehiclesEl.textContent = stats.activeVehicles;
-        this.totalDistanceEl.textContent = `${stats.totalDistance} km`;
-        this.totalDeliveriesEl.textContent = stats.totalDeliveries;
-        this.efficiencyRatingEl.textContent = `${stats.efficiency}%`;
+        // Animate the counters
+        this.animateCounter(this.activeVehiclesEl, 0, stats.activeVehicles);
+        this.animateCounter(this.totalDistanceEl, 0, stats.totalDistance, ' km');
+        this.animateCounter(this.totalDeliveriesEl, 0, stats.totalDeliveries);
+        this.animateCounter(this.efficiencyRatingEl, 0, stats.efficiency, '%');
+
+        // Add a subtle highlight effect to the stat boxes
+        document.querySelectorAll('.stat-box').forEach(box => {
+            box.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
+            box.style.transform = 'translateY(-5px)';
+            box.style.boxShadow = 'var(--box-shadow)';
+
+            setTimeout(() => {
+                box.style.transform = '';
+                box.style.boxShadow = '';
+            }, 500);
+        });
+    }
+
+    /**
+     * Animate a counter from start to end value
+     */
+    animateCounter(element, start, end, suffix = '') {
+        if (!element) return;
+
+        const duration = 1000;
+        const startTime = performance.now();
+        const iconHTML = element.innerHTML.match(/<i[^>]*><\/i>/)?.[0] || '';
+
+        const updateCounter = (timestamp) => {
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Use easeOutExpo for a nice effect
+            const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+            const currentValue = Math.floor(start + easeProgress * (end - start));
+
+            element.innerHTML = `${iconHTML} ${currentValue}${suffix}`;
+
+            if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+            }
+        };
+
+        requestAnimationFrame(updateCounter);
     }
 
     /**
@@ -657,7 +698,7 @@ class FleetTrackerApp {
      */
     optimizeRoutes() {
         // Call the fleet manager to optimize routes
-        const optimizedRoutes = this.fleetManager.optimizeRoutes(this.mapController);
+        this.fleetManager.optimizeRoutes(this.mapController);
 
         // Refresh the map with optimized routes
         this.changeView('routes');
@@ -974,41 +1015,85 @@ class FleetTrackerApp {
     }
 
     /**
-     * Add dark mode toggle button to header
+     * Add dark mode toggle functionality
      */
     addDarkModeToggle() {
-        const userInfo = document.querySelector('.user-info');
-        if (!userInfo) return;
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        if (!darkModeToggle) return;
 
-        const darkModeBtn = document.createElement('button');
-        darkModeBtn.className = 'dark-mode-btn';
-        darkModeBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
-        darkModeBtn.title = 'Toggle Dark Mode';
+        // Check for saved theme preference or prefer-color-scheme
+        const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedTheme = localStorage.getItem('theme');
 
-        darkModeBtn.addEventListener('click', () => {
-            const isDarkMode = document.body.classList.toggle('dark-mode');
+        if (savedTheme === 'dark' || (!savedTheme && prefersDarkMode)) {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
 
-            // Update button icon and text
-            if (isDarkMode) {
-                darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
-                // Also toggle map if map controller exists
-                if (this.mapController && typeof this.mapController.toggleDarkMode === 'function') {
-                    if (!this.mapController.isDarkMode) {
-                        this.mapController.toggleDarkMode();
-                    }
-                }
-            } else {
-                darkModeBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
-                // Also toggle map if map controller exists
-                if (this.mapController && typeof this.mapController.toggleDarkMode === 'function') {
-                    if (this.mapController.isDarkMode) {
-                        this.mapController.toggleDarkMode();
-                    }
+            // Also toggle map if map controller exists
+            if (this.mapController && typeof this.mapController.toggleDarkMode === 'function') {
+                if (!this.mapController.isDarkMode) {
+                    this.mapController.toggleDarkMode();
                 }
             }
-        });
+        }
 
-        userInfo.appendChild(darkModeBtn);
+        // Add event listener
+        darkModeToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.toggleDarkMode();
+        });
+    }
+
+    /**
+     * Toggle dark mode with animation
+     */
+    toggleDarkMode() {
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const isDarkMode = document.body.classList.toggle('dark-mode');
+
+        // Save preference
+        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+
+        // Update icon with animation
+        if (darkModeToggle) {
+            darkModeToggle.style.transition = 'transform 0.3s ease';
+            darkModeToggle.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                darkModeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                setTimeout(() => {
+                    darkModeToggle.style.transform = 'rotate(0)';
+                }, 50);
+            }, 150);
+        }
+
+        // Toggle map if map controller exists
+        if (this.mapController && typeof this.mapController.toggleDarkMode === 'function') {
+            if ((isDarkMode && !this.mapController.isDarkMode) ||
+                (!isDarkMode && this.mapController.isDarkMode)) {
+                this.mapController.toggleDarkMode();
+            }
+        }
+
+        // Add a subtle flash effect
+        const flash = document.createElement('div');
+        flash.style.position = 'fixed';
+        flash.style.top = '0';
+        flash.style.left = '0';
+        flash.style.width = '100%';
+        flash.style.height = '100%';
+        flash.style.backgroundColor = isDarkMode ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
+        flash.style.zIndex = '9999';
+        flash.style.pointerEvents = 'none';
+        flash.style.opacity = '0';
+        flash.style.transition = 'opacity 0.3s ease';
+        document.body.appendChild(flash);
+
+        // Trigger animation
+        setTimeout(() => flash.style.opacity = '1', 10);
+        setTimeout(() => {
+            flash.style.opacity = '0';
+            setTimeout(() => document.body.removeChild(flash), 300);
+        }, 100);
     }
 
     /**
@@ -1098,7 +1183,7 @@ class FleetTrackerApp {
             switch (e.key) {
                 case 'd':
                     // Toggle dark mode
-                    document.querySelector('.dark-mode-btn')?.click();
+                    this.toggleDarkMode();
                     break;
                 case 'v':
                     // View all vehicles
