@@ -1,5 +1,9 @@
 # FleetTracker Pro
 
+FOR SEE THE PROJECT LIVE CLICK:
+https://erencanakyuz.github.io/FleetTrackerPro/
+
+
 FleetTracker Pro is a GPS-based fleet management system for tracking and managing vehicles in Istanbul. The application provides real-time location tracking, route management, and vehicle status monitoring.
 
 ## Features
@@ -14,41 +18,6 @@ FleetTracker Pro is a GPS-based fleet management system for tracking and managin
 - ⚡ Speed boost feature for testing high-speed vehicles (up to 200 km/h)
 - 📱 Responsive design that works on desktop and mobile devices
 
-## How to Run
-
-There are several ways to run the application:
-
-### Option 1: Using the Node.js Server
-
-If you have Node.js installed:
-
-```bash
-# From the project root directory
-node run_server.js
-```
-
-Then open your browser and go to: http://localhost:8080
-
-### Option 2: Using Python's HTTP Server
-
-If you have Python installed:
-
-```bash
-# Python 3
-python -m http.server
-
-# Python 2
-python -m SimpleHTTPServer
-```
-
-Then open your browser and go to: http://localhost:8000
-
-### Option 3: Using an IDE's Live Server
-
-If you're using VS Code or Cursor:
-1. Install the "Live Server" extension
-2. Right-click on `index.html`
-3. Select "Open with Live Server"
 
 ## Keyboard Shortcuts
 
